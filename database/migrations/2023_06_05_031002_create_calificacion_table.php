@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('calificaciones', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_calificante')->constrained('users');
-            $table->foreignId('id_calificador')->constrained('users');
-            $table->tinyInteger('puntaje');
+            $table->foreignId('id_calificado')->constrained('users');
+            $table->decimal('puntaje',2,1,true);
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('calificacion');
+        Schema::dropIfExists('calificaciones');
     }
 };

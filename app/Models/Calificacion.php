@@ -9,9 +9,11 @@ class Calificacion extends Model
 {
     use HasFactory;
 
+    protected $table = 'calificaciones';
+
     protected $fillable = [
         'id_calificante',
-        'id_calificador',
+        'id_calificado',
         'puntaje',
     ];
 }
