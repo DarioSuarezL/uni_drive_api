@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Calificacion;
 use Illuminate\Http\Request;
 
 class ApiController extends Controller
@@ -24,4 +25,21 @@ class ApiController extends Controller
 
         return response()->json(['message' => 'Usuario registrado correctamente']);
     }
+
+
+
+    public function storeCalificacion(Request $request){
+        $calificacion = Calificacion::create([
+            'id_calificante' => $request->id_calificante,
+            'id_calificado' => $request->id_calificado,
+            'puntaje' => $request->puntaje,
+        ]);
+
+        if(!$calificacion){
+            return response()->json(['message' => 'Error al registrar calificacion']);
+        }
+
+        return response()->json(['message' => 'Calificacion registrada correctamente']);
+    }
+
 }
