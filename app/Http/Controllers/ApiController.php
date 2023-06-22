@@ -13,7 +13,7 @@ class ApiController extends Controller
     public function storeUser(Request $request){
 
         $validator = Validator::make($request->all(),[
-            'name' => 'required|max:30',
+            'name' => 'required|max:50|min:3',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
             'registro' => 'required|max:9|unique:users',
@@ -26,10 +26,10 @@ class ApiController extends Controller
             return response()->json([
                 'message' => 'Error al registrar usuario, asegurese de llenar todos los campos correctamente',
                 'errors' => $validator->errors(),
-            ]);
+            ], 402);
         }
 
-        $user = User::create([
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
@@ -39,11 +39,13 @@ class ApiController extends Controller
             'foto_horario' => $request->foto_horario,
         ]);
 
+        $user = User::where('registro', $request->registro)->first();
+
         if(!$user){
-            return response()->json(['message' => 'Error al registrar usuario']);
+            return response()->json(['message' => 'Error al registrar usuario'], 404);
         }
 
-        return response()->json(['message' => 'Usuario registrado correctamente']);
+        return response()->json($user, 200);
     }
 
 
@@ -52,25 +54,28 @@ class ApiController extends Controller
 
         if(!$user){
             return response()->json([
-                'message' => 'Usuario no encontrado, asegurese de enviar los datos correctamente',
-            ]);
+                'message' => 'Usuario no encontrado, asegurese de enviar los datos correctamente'
+            ], 404);
         }
 
         if(!Hash::check($request->password, $user->password)){
             return response()->json([
                 'message' => 'Contraseña incorrecta',
-                'username' => $user->name,
-            ]);
+                'username' => $user->name
+            ], 402);
         }
 
-        return response()->json([
-            'message' => 'Usuario válido',
-            'user' => $user
-        ]);
+        return response()->json($user, 200);
     }
 
 
     public function storeCalificacion(Request $request){
+        $validator = Validator::make($request->all(),[
+            'id_calificante' => 'required',
+            'id_calificado' => 'required',
+            'puntaje' => 'required',
+        ]);
+
         $calificacion = Calificacion::create([
             'id_calificante' => $request->id_calificante,
             'id_calificado' => $request->id_calificado,

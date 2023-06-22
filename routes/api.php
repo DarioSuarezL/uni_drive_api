@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //las rutas api tiene api en su url
-Route::post('/user', [ApiController::class, 'storeUser']);
+Route::post('/user/register', [ApiController::class, 'storeUser']);
 Route::post('/user/login', [ApiController::class, 'getUser']);
 
 Route::post('/calificacion', [ApiController::class, 'storeCalificacion']);
